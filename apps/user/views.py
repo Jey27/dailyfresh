@@ -1,7 +1,11 @@
 from django.shortcuts import render,redirect
 from django.core.urlresolvers import reverse
+from django.http import HttpResponse
 from user.models import User
+from django.conf import settings
 from django.views.generic import View
+from itsdangerous import TimedJSONWebSignatureSerializer as Serializer
+from itsdangerous import SignatureExpired
 import re
 # Create your views here.
 def register(request):
@@ -108,5 +112,26 @@ class RigisterView(View):
         user.is_active = 0
         user.save()
 
+        # 发送激活邮件，包含激活链接
+        # 加密用户的身份信息，生成激活token
+        serializer = Serializer(settings.SECRET_KEY,3600)
+        info = {'confirm':user.id}
+        token = serializer.dumps(info)
+
+        # 发邮件
         # 返回应答
         return redirect(reverse('goods:index'))
+
+class ActiveView(View):
+    '''用户激活'''
+    def get(self,request,token):
+        '''进行用户激活'''
+        # 进行解密
+        serializer = Serializer(settings.SECRET_KEY, 3600)
+        try:
+            info = serializer.loads(token)
+            # 获取待激活用户的id
+            user_id = info['confirm']
+            user = User.objects.get(id=user_id)
+        except SignatureExpired as e:
+            return HttpResponse('激活链接已过期')
