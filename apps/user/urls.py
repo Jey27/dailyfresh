@@ -1,6 +1,6 @@
 
 from django.conf.urls import url
-from user.views import RigisterView,ActiveView,LoginView,UserInfoView,UserOrderView,AddressView
+from user.views import RigisterView,ActiveView,LoginView,LogoutView,UserInfoView,UserOrderView,AddressView
 from django.contrib.auth.decorators import login_required
 
 urlpatterns = [
@@ -9,7 +9,8 @@ urlpatterns = [
     url(r'^register$',RigisterView.as_view(),name='register'),
     url(r'^active/(.*)$',ActiveView.as_view(),name='acive'),
     url(r'^login$',LoginView.as_view(),name='login'),
-    url(r'^$',login_required(UserInfoView.as_view()),name='user'),
-    url(r'^order$',login_required(UserOrderView.as_view()),name='order'),
-    url(r'^address$',login_required(AddressView.as_view()),name='address'),
+    url(r'^logout$',LogoutView.as_view(),name = 'logout'),
+    url(r'^$',UserInfoView.as_view(),name='user'),
+    url(r'^order$',UserOrderView.as_view(),name='order'),
+    url(r'^address$',AddressView.as_view(),name='address'),
 ]
