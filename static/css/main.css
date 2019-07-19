@@ -234,6 +234,7 @@ html,body{height:100%}
 }
 
 .goods_detail_pic{width:350px;height:350px;margin:24px 0 0 24px;}
+.goods_detail_pic img{display: block;width: 350px;height: 350px;margin: 0 auto;}
 .goods_detail_list{
 	width:730px;height:350px;margin:24px 24px 0 0;
 }
