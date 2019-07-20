@@ -159,5 +159,5 @@ class ListView(View):
             'sort':sort,
             'pages':pages
         }
-
+        dict
         return render(request,'list.html',context)
